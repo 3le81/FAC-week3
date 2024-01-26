@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Challenge 2 | Promise practice</title>
+</head>
+
+<body>
+  <h1>Open the console</h1>
+  <script>
+    // write your code here
+
+    // Define a function to fetch data from a given URL and parse the JSON response
+    const fetchData = url => fetch(url).then((response) => response.json());
+
+    // Start by fetching data for Pikachu from the specified URL
+    fetch("https://pokeapi.co/api/v2/pokemon/pikachu")
+      .then((pikachuResponse) => pikachuResponse.json()) // Step 1: Parse JSON from the response
+      .then((pikachu) => fetchData(pikachu.species.url)) // Step 2: Fetch species data using the parsed JSON from Pikachu
+      .then((species) => fetchData(species.shape.url))   // Step 3: Fetch shape data using the parsed JSON from the species
+      .then((shape) => console.log(shape))               // Log the final shape data to the console
+      .catch((error) => console.error("Error:", error)); // Handle any errors that may occur during the process
+  </script>
+
+</body>
+
+</html>
