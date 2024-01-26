@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real world fetch</title>
+
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    form {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      text-align: center;
+      width: 300px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #ffd700;
+      color: #333;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #ffcc00;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .result h1 {
+      color: #333;
+      font-size: 30px;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .result img {
+      max-width: 100%;
+      height: auto;
+      border: 2px solid #333;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <form>
+    <h1>Finding Pokémon</h1>
+    <label for="pokeName">Enter Pokémon Name:</label>
+    <input id="pokeName" name="pokeName" type="search" required />
+    <button type="submit">Search</button>
+    <div class="result"></div>
+  </form>
+
+  <script>
+    // Arrow function to create and append elements based on pokemonData
+    const displayPokemon = (pokemonData, targetElement) => {
+      // Create a heading element for the Pokémon name
+      const titleElement = document.createElement("h1");
+      titleElement.textContent = pokemonData.name;
+
+      // Create an image element for the Pokémon sprite
+      const pokemonImage = document.createElement("img");
+      pokemonImage.src = pokemonData.sprites.front_default;
+      pokemonImage.alt = "";
+
+      // Append the heading and image to the target element
+      targetElement.append(titleElement, pokemonImage);
+    };
+
+    // Event listener for form submission
+    const form = document.querySelector("form");
+    const resultDiv = document.querySelector(".result");
+
+    form.addEventListener("submit", (event) => {
+      // Prevent the default form submission behavior
+      event.preventDefault();
+
+      // Clear all previous results
+      resultDiv.innerHTML = "";
+
+      // Create a FormData object from the form
+      const formData = new FormData(form);
+
+      // Retrieve the Pokémon name from the form data
+      const pokemonName = formData.get("pokeName");
+
+      // Fetch Pokémon data from the PokeAPI
+      fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+        .then((response) => {
+          if (!response.ok) throw new Error(response.status);
+          return response.json();
+        })
+        .then((pokemonData) => {
+          // Display the Pokémon using the displayPokemon function
+          displayPokemon(pokemonData, resultDiv);
+        })
+        .catch((error) => {
+          console.error(error);
+          resultDiv.textContent = `Couldn't find "${pokemonName}" or something went wrong. Try Again!`;
+        });
+    });
+  </script>
+</body>
+
+</html>

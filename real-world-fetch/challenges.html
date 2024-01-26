@@ -1,0 +1,98 @@
+<!-- Challenge : queryselector -->
+<form>
+    <label for="username">Username</label>
+    <input id="username" />
+
+    <label for="userpassword">Password</label>
+    <input type="password" id="userpassword" />
+
+    <button type="submit">Log in</button>
+</form>
+
+<script>
+    // Challenge 1 :
+
+    // fetch("https://echo.oliverjam.workers.dev/status/404")
+    // .then(response => {
+    // if (response.ok) {
+    // return response;
+    // } else {
+    // throw new Error(response.status);
+    // }
+    // })
+    // .then(response => console.log(response))
+    // .catch(error => console.error(error));
+
+
+    // --------------------------------------------------------------------
+
+    // Challenge 2 :
+    // const data = { name: "Elena" };
+    // fetch("https://echo.oliverjam.workers.dev/json", {
+    // method: "POST",
+    // headers: { "content-type": "application/json" },
+    // body: JSON.stringify(data)
+    // })
+    // .then((response) => {
+    // if (!response.ok) throw new Error(response.status);
+    // return response.json();
+    // })
+    // .then((json) => console.log(json))
+    // .catch((error) => console.error(error));
+    // -------------------------------------------------------
+
+    // const form = document.querySelector("form");
+
+    // form.addEventListener("submit", function (event) {
+    //     event.preventDefault();
+
+    //     const username = document.querySelector("#username").value;
+    //     const userpassword = document.querySelector("#userpassword").value;
+    //     const data = { username, userpassword };
+
+    //     fetch("https://echo.oliverjam.workers.dev/json", {
+    //         method: "POST",
+    //         headers: {"content-type": "application/json"},
+    //         body: JSON.stringify(data)
+    //     })
+    //         .then(function (response) {
+    //             if (!response.ok) throw new Error(response.status);
+    //             return response.json();
+    //         })
+    //         .then(function (json) {
+    //             console.log(json);
+    //         })
+    //         .catch(function (error) {
+    //             console.error(error);
+    //         });
+    // });
+
+
+    // CHALLENGE 2 : new FormData() 
+
+    const form = document.querySelector("form");
+
+    form.addEventListener("submit", event => {
+        event.preventDefault();
+
+        // Use new FormData() to get all input values
+        const formData = new FormData(form);
+
+        // Convert FormData into an object using Object.fromEntries
+        const data = Object.fromEntries(formData);
+
+        // Continue with the fetch request
+        fetch("https://echo.oliverjam.workers.dev/json", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(data)
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error(response.status);
+                return response.json();
+            })
+            .then((json) => console.log(json))
+            .catch((error) => console.error(error));
+    });
+
+</script>
